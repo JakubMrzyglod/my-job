@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/JakubMrzyglod/my-job/issues"
   },
-  "homepage": "https://github.com/JakubMrzyglod/my-job#readme"
+  "homepage": "https://github.com/JakubMrzyglod/my-job#readme",
+  "dependencies": {
+    "husky": "^8.0.1"
+  }
 }
