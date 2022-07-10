@@ -46,3 +46,24 @@ resource "google_cloud_run_service_iam_member" "run_all_users" {
 output "service_url" {
   value = google_cloud_run_service.run_service.status[0].url
 }
+
+resource "google_sql_database_instance" "instance" {
+  name = "db-instance"
+  database_version = "MYSQL_8_0"
+  region = "europe-central2"
+  settings {
+    tier = "db-f1-micro"
+  }
+}
+resource "google_sql_database" "database" {
+  name = "db"
+  instance = "${google_sql_database_instance.instance.name}"
+  charset = "utf8"
+  collation = "utf8_general_ci"
+}
+resource "google_sql_user" "users" {
+  name = "user"
+  instance = "${google_sql_database_instance.instance.name}"
+  host = "%"
+  password = "pass"
+}
