@@ -1,5 +1,6 @@
 variable "project_id" {
   type = string
+  sensitive = true
 }
 
 variable "database" {
@@ -8,6 +9,7 @@ variable "database" {
     pass = string
     name = string
   })
+  sensitive = true
 }
 
 terraform {
