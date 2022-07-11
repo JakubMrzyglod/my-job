@@ -6,6 +6,7 @@ variable "database" {
   type = object({
     user = string
     pass = string
+    name = string
   })
 }
 
