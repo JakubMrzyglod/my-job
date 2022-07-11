@@ -13,16 +13,17 @@ jobs:
           curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
           sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
           sudo apt-get update && sudo apt-get install terraform
-      - name: Go to infra folder
-        run: cd ./infra
       - name: Valid installation
         run: terraform -v
       - name: Terraform init
-        run: terraform init
+        run: |
+          cd ./infra
+          terraform init
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
       - name: Terraform plan
         run: |
+          cd ./infra
           export TF_VAR_database='{ user: ${{ secrets.DB_USER }}, pass: ${{ secrets.DB_PASS }}, name: ${{ secrets.DB_NAME }} }'
           terraform plan
         env:
