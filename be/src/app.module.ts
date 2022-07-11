@@ -11,6 +11,7 @@ import { ConfigurationValidationSchema } from 'src/config/validation/schema';
       load: [configuration],
       cache: true,
       validate,
+      isGlobal: true,
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
