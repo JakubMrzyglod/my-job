@@ -4,6 +4,7 @@ on: [push]
 jobs:
   terraform:
     runs-on: ubuntu-latest
+    environment: dev
     steps:
       - uses: actions/checkout@v2
       - name: Install Terraform
@@ -14,9 +15,15 @@ jobs:
           sudo apt-get update && sudo apt-get install terraform
       - name: Valid installation
         run: terraform -v
+      - name: Terraform init
+        run: terraform init
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
       - name: Terraform plan
         run: |
           cd ./infra
-          export TF_VAR_project_id=${{ secrets.PROJECT_ID }}
           export TF_VAR_database='{ user: ${{ secrets.DB_USER }}, pass: ${{ secrets.DB_PASS }}, name: ${{ secrets.DB_NAME }} }'
           terraform plan
+        env:
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+          TF_VAR_project_id: ${{ secrets.PROJECT_ID }}
