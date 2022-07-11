@@ -1,3 +1,14 @@
+variable "project_id" {
+  type = string
+}
+
+variable "database" {
+  type = object({
+    user = string
+    pass = string
+  })
+}
+
 terraform {
   required_version = ">= 0.14"
 
@@ -7,12 +18,11 @@ terraform {
 }
 
 provider "google" {
-  project = "myjob-355709"
+  project = var.project_id
 }
 
 resource "google_project_service" "run_api" {
   service = "run.googleapis.com"
-
   disable_on_destroy = true
 }
 
@@ -56,14 +66,14 @@ resource "google_sql_database_instance" "instance" {
   }
 }
 resource "google_sql_database" "database" {
-  name = "db"
+  name = var.database.name
   instance = "${google_sql_database_instance.instance.name}"
   charset = "utf8"
   collation = "utf8_general_ci"
 }
 resource "google_sql_user" "users" {
-  name = "user"
+  name = var.database.user
   instance = "${google_sql_database_instance.instance.name}"
   host = "%"
-  password = "pass"
+  password = var.database.pass
 }
