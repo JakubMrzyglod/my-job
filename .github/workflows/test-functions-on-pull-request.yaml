@@ -28,4 +28,4 @@ jobs:
         env:
           GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
           TF_VAR_project_id: ${{ secrets.PROJECT_ID }}
-          TF_VAR_database: '{ user: ${{ secrets.DB_USER }}, pass: ${{ secrets.DB_PASS }}, name: ${{ secrets.DB_NAME }} }'
+          TF_VAR_database: '{ "user": "${{ secrets.DB_USER }}", "pass": "${{ secrets.DB_PASS }}", "name": "${{ secrets.DB_NAME }}" }'
