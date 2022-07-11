@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-npm run --prefix ./fe lint:format
+npm run --prefix ./fe lint:format -- --cache src
 npm run --prefix ./fe lint:fix -- --cache
 npm run --prefix ./be lint -- --cache
