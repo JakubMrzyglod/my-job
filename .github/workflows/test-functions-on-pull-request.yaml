@@ -16,6 +16,6 @@ jobs:
         run: terraform -v
       - name: Terraform plan
         run: |
-          export TF_VAR_project_id=${secrets.project_id}
+          export TF_VAR_project_id=${secrets.PROJECT_ID}
           export TF_VAR_database='{ user: ${secrets.DB_USER}, pass: ${secrets.DB_PASS}, name: ${secrets.DB_NAME} }'
           terraform plan
