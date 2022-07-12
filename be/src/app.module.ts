@@ -4,6 +4,8 @@ import configuration from './config/configuration';
 import { validate } from 'src/config/validation';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigurationValidationSchema } from 'src/config/validation/schema';
+import { UserModule } from './modules/user/user.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -26,6 +28,8 @@ import { ConfigurationValidationSchema } from 'src/config/validation/schema';
         synchronize: false,
       }),
     }),
+    UserModule,
+    AuthModule,
   ],
 })
 export class AppModule {}

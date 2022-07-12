@@ -8,4 +8,8 @@ export default (): ConfigurationValidationSchema => ({
     pass: process.env.DB_PASS,
     name: process.env.DB_NAME,
   },
+  auth: {
+    passwordSalt: process.env.PASSWORD_SALT,
+    jwtSecret: process.env.JWT_SECRET_KEY,
+  },
 });
