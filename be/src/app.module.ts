@@ -6,7 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigurationValidationSchema } from '@config/validation/schema';
 import { UserModule } from '@modules/user/user.module';
 import { AuthModule } from '@modules/auth/auth.module';
-import path from 'path';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
