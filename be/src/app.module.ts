@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import configuration from './config/configuration';
-import { validate } from 'src/config/validation';
+import configuration from '@config/configuration';
+import { validate } from '@config/validation';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigurationValidationSchema } from 'src/config/validation/schema';
-import { UserModule } from './modules/user/user.module';
-import { AuthModule } from './modules/auth/auth.module';
+import { ConfigurationValidationSchema } from '@config/validation/schema';
+import { UserModule } from '@modules/user/user.module';
+import { AuthModule } from '@modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -17,16 +17,26 @@ import { AuthModule } from './modules/auth/auth.module';
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (config: ConfigService<ConfigurationValidationSchema>) => ({
-        type: 'mysql',
-        host: config.get('database').host,
-        port: config.get('database').port,
-        username: config.get('database').user,
-        password: config.get('database').pass,
-        database: config.get('database').name,
-        entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-        synchronize: false,
-      }),
+      useFactory: (config: ConfigService<ConfigurationValidationSchema>) => {
+        console.log({ config: config.get('database'), dirname: __dirname });
+        return {
+          type: 'mysql',
+          host: config.get('database').host,
+          port: config.get('database').port,
+          username: config.get('database').user,
+          password: config.get('database').pass,
+          database: config.get('database').name,
+          entities: [__dirname + '**/*.entity{.ts,.js}'],
+          synchronize: false,
+          logging: false,
+          migrationsRun: false,
+          migrationsTableName: 'migrations',
+          migrations: [`${__dirname}/migrations/*.{ts,js}`],
+          // cli: {
+          //   migrationsDir: `${location}/migrations`,
+          // },
+        };
+      },
     }),
     UserModule,
     AuthModule,

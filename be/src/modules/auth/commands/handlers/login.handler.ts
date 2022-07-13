@@ -1,9 +1,9 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { LoginCommand } from 'src/modules/auth/commands/impl/login.command';
-import { UserService } from 'src/modules/user/user.service';
+import { LoginCommand } from '@modules/auth/commands/impl/login.command';
+import { UserService } from '@modules/user/user.service';
 import { NotFoundException } from '@nestjs/common';
-import { AuthErrorMessage } from 'src/modules/auth/constants/errorMessages';
-import { AuthService } from 'src/modules/auth/auth.service';
+import { AuthErrorMessage } from '@modules/auth/constants/errorMessages';
+import { AuthService } from '@modules/auth/auth.service';
 
 @CommandHandler(LoginCommand)
 export class LoginHandler implements ICommandHandler<LoginCommand> {

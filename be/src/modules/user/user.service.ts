@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as crypto from 'crypto';
-import { ConfigurationValidationSchema } from 'src/config/validation/schema';
-import { AuthConfigurationValidationSchema } from 'src/config/validation/schema/auth';
-import { User } from 'src/modules/user/user.entity';
+import { ConfigurationValidationSchema } from '@config/validation/schema';
+import { AuthConfigurationValidationSchema } from '@config/validation/schema/auth';
+import { User } from '@modules/user/user.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()

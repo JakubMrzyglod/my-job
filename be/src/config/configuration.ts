@@ -1,4 +1,4 @@
-import { ConfigurationValidationSchema } from 'src/config/validation/schema';
+import { ConfigurationValidationSchema } from '@config/validation/schema';
 
 export default (): ConfigurationValidationSchema => ({
   database: {
