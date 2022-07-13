@@ -6,7 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigurationValidationSchema } from '@config/validation/schema';
 import { UserModule } from '@modules/user/user.module';
 import { AuthModule } from '@modules/auth/auth.module';
-
+import path from 'path';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -17,26 +17,16 @@ import { AuthModule } from '@modules/auth/auth.module';
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (config: ConfigService<ConfigurationValidationSchema>) => {
-        console.log({ config: config.get('database'), dirname: __dirname });
-        return {
-          type: 'mysql',
-          host: config.get('database').host,
-          port: config.get('database').port,
-          username: config.get('database').user,
-          password: config.get('database').pass,
-          database: config.get('database').name,
-          entities: [__dirname + '**/*.entity{.ts,.js}'],
-          synchronize: false,
-          logging: false,
-          migrationsRun: false,
-          migrationsTableName: 'migrations',
-          migrations: [`${__dirname}/migrations/*.{ts,js}`],
-          // cli: {
-          //   migrationsDir: `${location}/migrations`,
-          // },
-        };
-      },
+      useFactory: (config: ConfigService<ConfigurationValidationSchema>) => ({
+        type: 'mysql',
+        host: config.get('database').host,
+        port: config.get('database').port,
+        username: config.get('database').user,
+        password: config.get('database').pass,
+        database: config.get('database').name,
+        synchronize: false,
+        logging: false,
+      }),
     }),
     UserModule,
     AuthModule,
