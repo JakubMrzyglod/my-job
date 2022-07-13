@@ -1,7 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
 
-type Call = CallFn<(token?: string, ...props: string[]) => string>;
+// type Call = CallFn<(token?: string, ...props: string[]) => string>;
 type CallFn<T extends PathFn> = {
   (token?: string, ...params: Parameters<T>): request.Test;
   server: any;
@@ -32,11 +32,7 @@ export const defineCall = <T extends PathFn>(
   method: ReqMethod,
   path: T | string,
 ) => {
-  const call: {
-    (token?: string, ...params: Parameters<T>): request.Test;
-    server: any;
-    setApp: (app: INestApplication) => void;
-  } = (token, ...params: Parameters<T>): request.Test => {
+  const call: CallFn<T> = (token, ...params: Parameters<T>): request.Test => {
     token ??= INVALID_TOKEN;
 
     const methodPath = typeof path === 'string' ? path : path(...params);
