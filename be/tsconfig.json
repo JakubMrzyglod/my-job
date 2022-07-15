@@ -18,7 +18,9 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
+      "@prisma": ["./src/common/prisma.service"],
       "@config/*": ["./src/config/*"],
+      "@common/*": ["./src/common/*"],
       "@utils/*": ["./src/utils/*"],
       "@main": ["./src/main"],
       "@appModule": ["./src/app.module"],

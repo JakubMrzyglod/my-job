@@ -1,23 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { InjectRepository } from '@nestjs/typeorm';
 import * as crypto from 'crypto';
 import { ConfigurationValidationSchema } from '@config/validation/schema';
 import { AuthConfigurationValidationSchema } from '@config/validation/schema/auth';
-import { User } from '@modules/user/user.entity';
-import { Repository } from 'typeorm';
+import { PrismaService } from '@prisma';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User)
-    private usersRepository: Repository<User>,
     private configService: ConfigService<ConfigurationValidationSchema>,
+    private readonly prisma: PrismaService,
   ) {}
 
   async findUserByEmailAndPassword(email: string, password: string) {
     const hashedPassword = this.hashPassword(password);
-    const user = await this.usersRepository.findOne({
+    const user = await this.prisma.user.findFirst({
       where: { email, hashedPassword },
     });
     return user;

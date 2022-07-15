@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 
-export const clearDbTables = async () => {
+export default async () => {
   const prisma = new PrismaClient();
   const tables = await prisma.$queryRaw<{ tableName: string }[]>`
     SELECT table_name AS "tableName"

@@ -1,5 +1,5 @@
 import { INestApplication } from '@nestjs/common';
-import request from 'supertest';
+import * as request from 'supertest';
 
 // type Call = CallFn<(token?: string, ...props: string[]) => string>;
 type CallFn<T extends PathFn> = {
