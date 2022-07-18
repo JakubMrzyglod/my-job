@@ -11,4 +11,40 @@ model User {
   id Int  @default(autoincrement()) @id
   email String
   hashedPassword String
+
+  organizations UserRoleInOrganization[]
+}
+
+model UserRoleInOrganization {
+  userId Int
+  user User @relation(fields: [userId], references: [id])
+
+  organizationId Int
+  organization Organization @relation(fields: [organizationId], references: [id])
+
+  role Role @default(WORKER)
+
+  @@unique([userId, organizationId])
+}
+
+enum Role {
+  OWNER
+  WORKER
+}
+
+model Organization {
+  id Int @default(autoincrement()) @id
+  name String
+
+  users UserRoleInOrganization[]
+  groups Group[]
+}
+
+model Group {
+  id Int @default(autoincrement()) @id
+  name String
+  organizationId Int
+  organization Organization @relation(fields: [organizationId], references: [id])
+
+  @@unique([name, organizationId])
 }

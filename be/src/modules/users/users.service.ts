@@ -20,7 +20,7 @@ export class UserService {
     return user;
   }
 
-  private hashPassword(password: string) {
+  hashPassword(password: string) {
     const { passwordSalt } =
       this.configService.get<AuthConfigurationValidationSchema>('auth');
 

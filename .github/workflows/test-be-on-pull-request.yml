@@ -1,0 +1,47 @@
+name: Lint and test backend
+on:
+  pull_request:
+    types:
+      - synchronize
+      - opened
+      - reopened
+    paths:
+      - 'be/**'
+
+jobs:
+  test_functions:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0.20
+        env:
+          MYSQL_USER: ${{ secrets.DB_USER }}
+          MYSQL_PASSWORD: ${{ secrets.DB_PASS }}
+          MYSQL_ROOT_PASSWORD: ${{ secrets.DB_PASS }}
+          MYSQL_DATABASE: ${{ secrets.DB_NAME }}
+        ports:
+          - ${{ secrets.DB_PORT }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+      - name: Cache npm dependencies
+        uses: actions/cache@v2.1.2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('./be/package-lock.json') }}
+      - name: Cache eslint
+        uses: actions/cache@v2.1.2
+        with:
+          path: ~/**/be/.eslintcache
+          key: ${{ runner.os }}-eslint-${{ hashFiles('./be/.eslintcache') }}
+      - name: Install dependencies
+        run: npm --prefix ./be install
+      - name: Lint
+        run: npm run --prefix ./be lint -- --cache
+      - name: Database migrations
+        run: npm run --prefix ./be migration:run
+      - name: Test E2E
+        run: npm run --prefix ./be test:e2e
