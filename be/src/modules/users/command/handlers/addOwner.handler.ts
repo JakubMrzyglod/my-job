@@ -58,6 +58,7 @@ export class AddOwnerHandler implements ICommandHandler<AddOwnerCommand> {
           },
         },
       },
+      include: { organizations: true },
     });
   }
 }

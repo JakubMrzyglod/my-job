@@ -5,7 +5,9 @@ import * as request from 'supertest';
 type CallFn<T extends PathFn> = {
   (token?: string, ...params: Parameters<T>): request.Test;
   server: any;
+  token: string;
   setApp(app: INestApplication): INestApplication;
+  setDefaultToken(token: string): void;
 };
 type ReqMethod = 'get' | 'post' | 'delete' | 'put' | 'patch';
 type PathFn = (...args: string[]) => string;
@@ -33,15 +35,17 @@ export const defineCall = <T extends PathFn>(
   path: T | string,
 ) => {
   const call: CallFn<T> = (token, ...params: Parameters<T>): request.Test => {
-    token ??= INVALID_TOKEN;
-
     const methodPath = typeof path === 'string' ? path : path(...params);
     return request(call.server)
       [method](methodPath)
-      .set('Authorization', `Bearer ${token}`);
+      .set('Authorization', `Bearer ${token ?? call.token}`);
   };
   call.server = null;
+  call.token = INVALID_TOKEN;
   call.setApp = (app: INestApplication) => (call.server = app.getHttpServer());
+  call.setDefaultToken = (token: string) => {
+    call.token = token;
+  };
 
   return call;
 };

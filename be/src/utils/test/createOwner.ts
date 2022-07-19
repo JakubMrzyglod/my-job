@@ -41,5 +41,6 @@ export const createOwner = async (
         },
       },
     },
+    include: { organizations: true },
   });
 };

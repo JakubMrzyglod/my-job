@@ -34,32 +34,46 @@ describe('PATCH auth/login', () => {
       .expect(...resErrMsg(409, UserErrorMessage.USER_AS_OWNER_EXISTS));
   });
 
+  it('should throw error if body is empty', async () => {
+    await callCreateOwner().expect(
+      ...resErrMsg(400, [
+        'organizationName must be a string',
+        'email must be an email',
+        'password must be longer than or equal to 8 characters',
+        'password must be a string',
+      ]),
+    );
+  });
+
   it('should create user with organization as owner', async () => {
     const { body } = await callCreateOwner()
       .send({ email, password, organizationName })
       .expect(201);
 
-    expect(body.token).toBeDefined();
+    expect(body).toEqual({
+      token: expect.any(String),
+    });
 
     const createdUser = await prisma.user.findFirst({
       where: { email },
       include: { organizations: { include: { organization: true } } },
     });
 
-    expect(createdUser).toBeDefined();
-    expect(createdUser.id).toBeDefined();
-    expect(createdUser.hashedPassword).toBeDefined();
-    expect(createdUser.email).toBe(email);
-
-    expect(createdUser.organizations?.length).toBe(1);
-
-    const createdUserOrganization = createdUser.organizations[0];
-    expect(createdUserOrganization).toBeDefined();
-    expect(createdUserOrganization.role).toBe(Role.OWNER);
-
-    const createdOrganization = createdUserOrganization.organization;
-    expect(createdOrganization).toBeDefined();
-    expect(createdOrganization.id).toBeDefined();
-    expect(createdOrganization.name).toBe(organizationName);
+    expect(createdUser).toEqual({
+      id: expect.any(Number),
+      hashedPassword: expect.any(String),
+      email,
+      organizations: [
+        {
+          role: Role.OWNER,
+          organizationId: expect.any(Number),
+          userId: expect.any(Number),
+          organization: {
+            id: expect.any(Number),
+            name: expect.any(String),
+          },
+        },
+      ],
+    });
   });
 });

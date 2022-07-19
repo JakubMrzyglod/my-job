@@ -16,6 +16,7 @@ export class UserService {
     const hashedPassword = this.hashPassword(password);
     const user = await this.prisma.user.findFirst({
       where: { email, hashedPassword },
+      include: { organizations: true },
     });
     return user;
   }

@@ -42,8 +42,18 @@ describe('PATCH auth/login', () => {
       .expect(...resErrMsg(404, AuthErrorMessage.INVALID_EMAIL_OR_PASSWORD));
   });
 
+  it('should throw 404 error for no body', async () => {
+    await callLogin().expect(
+      ...resErrMsg(400, [
+        'email must be an email',
+        'password must be longer than or equal to 8 characters',
+        'password must be a string',
+      ]),
+    );
+  });
+
   it('should return access token', async () => {
     const { body } = await callLogin().send({ email, password }).expect(200);
-    expect(body.token).toBeDefined();
+    expect(body).toEqual({ token: expect.any(String) });
   });
 });
