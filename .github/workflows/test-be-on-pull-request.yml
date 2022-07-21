@@ -15,12 +15,12 @@ jobs:
       mysql:
         image: mysql:8.0.20
         env:
-          MYSQL_USER: ${{ secrets.DB_USER }}
-          MYSQL_PASSWORD: ${{ secrets.DB_PASS }}
-          MYSQL_ROOT_PASSWORD: ${{ secrets.DB_PASS }}
-          MYSQL_DATABASE: ${{ secrets.DB_NAME }}
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: tests
+          MYSQL_USER: prisma
+          MYSQL_PASSWORD: prisma
         ports:
-          - 3306:3306
+          - 3306
     steps:
       - uses: actions/checkout@v2
       - name: Setup node
@@ -44,9 +44,9 @@ jobs:
       - name: Database migrations
         run: npm run --prefix ./be migration:run
         env:
-          PRISMA_URL: mysql://${{ secrets.DB_USER }}:${{ secrets.DB_PASS }}@localhost:${{ job.services.mysql.ports[3306] }}/${{ secrets.DB_NAME}}
+          PRISMA_URL: mysql://prisma:prisma@localhost:3306/tests
       - name: Test E2E
         run: npm run --prefix ./be test:e2e
         env:
-          PRISMA_URL: mysql://${{ secrets.DB_USER }}:${{ secrets.DB_PASS }}@localhost:${{ job.services.mysql.ports[3306] }}/${{ secrets.DB_NAME}}
+          PRISMA_URL: mysql://prisma:prisma@localhost:3306/tests
           DB_PORT: ${{ job.services.mysql.ports[3306] }}
