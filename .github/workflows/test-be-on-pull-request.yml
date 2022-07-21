@@ -43,7 +43,10 @@ jobs:
         run: npm run --prefix ./be lint -- --cache
       - name: Database migrations
         run: npm run --prefix ./be migration:run
+        env:
+          PRISMA_URL: mysql://${{ secrets.DB_USER }}:${{ secrets.DB_PASS }}@localhost:${{ job.services.mysql.ports[3306] }}/${{ secrets.DB_NAME}}
       - name: Test E2E
         run: npm run --prefix ./be test:e2e
         env:
+          PRISMA_URL: mysql://${{ secrets.DB_USER }}:${{ secrets.DB_PASS }}@localhost:${{ job.services.mysql.ports[3306] }}/${{ secrets.DB_NAME}}
           DB_PORT: ${{ job.services.mysql.ports[3306] }}

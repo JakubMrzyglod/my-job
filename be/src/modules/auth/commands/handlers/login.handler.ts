@@ -3,8 +3,6 @@ import { LoginCommand } from '@modules/auth/commands/impl/login.command';
 import { UserService } from '@modules/users/users.service';
 import { NotFoundException } from '@nestjs/common';
 import { AuthErrorMessage } from '@modules/auth/constants/errorMessages';
-import { AuthService } from '@modules/auth/auth.service';
-import { JwtService } from '@nestjs/jwt';
 import { AccessTokenService } from '@modules/access-token/access-token.service';
 
 @CommandHandler(LoginCommand)
