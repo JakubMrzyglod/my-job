@@ -44,9 +44,9 @@ jobs:
       - name: Database migrations
         run: npm run --prefix ./be migration:run
         env:
-          PRISMA_URL: mysql://prisma:prisma@localhost:3306/tests
+          PRISMA_URL: mysql://prisma:prisma@127.0.0.1:3306/tests
       - name: Test E2E
         run: npm run --prefix ./be test:e2e
         env:
-          PRISMA_URL: mysql://prisma:prisma@localhost:3306/tests
+          PRISMA_URL: mysql://prisma:prisma@127.0.0.1:3306/tests
           DB_PORT: ${{ job.services.mysql.ports[3306] }}
