@@ -20,7 +20,7 @@ jobs:
           MYSQL_USER: prisma
           MYSQL_PASSWORD: prisma
         ports:
-          - 3306
+          - 3306:3306
     steps:
       - uses: actions/checkout@v2
       - name: Setup node
