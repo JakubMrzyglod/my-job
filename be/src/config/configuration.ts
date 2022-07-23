@@ -5,7 +5,7 @@ export default (): ConfigurationValidationSchema => {
     auth: {
       passwordSalt: process.env.PASSWORD_SALT,
       jwtSecret: process.env.JWT_SECRET_KEY,
-    }
+    },
   });
   return {
     database: {
