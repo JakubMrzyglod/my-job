@@ -1,0 +1,51 @@
+name: Lint and test backend
+on:
+  pull_request:
+    types:
+      - synchronize
+      - opened
+      - reopened
+    paths:
+      - 'be/**'
+
+jobs:
+  test_functions:
+    runs-on: ubuntu-latest
+    environment: dev
+    services:
+      mysql:
+        image: mysql:8.0.20
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: tests
+          MYSQL_USER: prisma
+          MYSQL_PASSWORD: prisma
+        ports:
+          - 3306:3306
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+      - name: Cache npm dependencies
+        uses: actions/cache@v2.1.2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('./be/package-lock.json') }}
+      - name: Cache eslint
+        uses: actions/cache@v2.1.2
+        with:
+          path: ~/**/be/.eslintcache
+          key: ${{ runner.os }}-eslint-${{ hashFiles('./be/.eslintcache') }}
+      - name: Install dependencies
+        run: npm --prefix ./be install
+      - name: Lint
+        run: npm run --prefix ./be lint -- --cache
+      - name: Copy env
+        run: mv ./be/.env.example ./be/.env
+      - name: Test E2E
+        run: npm run --prefix ./be test:e2e
+        env:
+          PRISMA_URL: mysql://root:root@127.0.0.1:3306/tests
+          DB_PORT: ${{ job.services.mysql.ports[3306] }}

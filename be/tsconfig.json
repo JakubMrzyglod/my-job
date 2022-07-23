@@ -16,6 +16,16 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
-  }
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@prisma": ["./src/common/prisma.service"],
+      "@config/*": ["./src/config/*"],
+      "@common/*": ["./src/common/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@main": ["./src/main"],
+      "@appModule": ["./src/app.module"],
+      "@modules/*": ["./src/modules/*"]
+    }
+  },
+  "include": ["src/**/*"]
 }

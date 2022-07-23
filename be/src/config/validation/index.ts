@@ -1,6 +1,6 @@
 import { plainToInstance } from 'class-transformer';
 import { validateSync } from 'class-validator';
-import { ConfigurationValidationSchema } from 'src/config/validation/schema';
+import { ConfigurationValidationSchema } from '@config/validation/schema';
 
 export function validate(config: Record<string, unknown>) {
   const validatedConfig = plainToInstance(
