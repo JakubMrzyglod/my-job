@@ -42,10 +42,10 @@ jobs:
         run: npm --prefix ./be install
       - name: Lint
         run: npm run --prefix ./be lint -- --cache
+      - name: Copy env
+        run: mv ./be/.env.example ./be/.env
       - name: Test E2E
         run: npm run --prefix ./be test:e2e
         env:
           PRISMA_URL: mysql://root:root@127.0.0.1:3306/tests
           DB_PORT: ${{ job.services.mysql.ports[3306] }}
-          JWT_SECRET_KEY: QeShVmYq3t6w9z$C&F)J@NcRfUjXnZr4u7x!A%D*G-KaPdSgVkYp3s5v8y/B?E(H
-          PASSWORD_SALT: SgVkYp3s6v9y/B?E(H+MbQeThWmZq4t7
