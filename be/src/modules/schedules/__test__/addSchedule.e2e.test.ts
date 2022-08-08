@@ -52,6 +52,8 @@ describe('POST /schedules', () => {
   });
 
   it('should throw error when body is empty', async () => {
-    await callAddSchedule().expect(...resErrMsg(400, ['name must be a string']));
+    await callAddSchedule().expect(
+      ...resErrMsg(400, ['name must be a string']),
+    );
   });
 });

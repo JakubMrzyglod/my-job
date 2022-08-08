@@ -2,7 +2,7 @@ name: Terraform apply on merge to dev
 on:
   push:
     branches:
-      - dev
+      - dev123
 
 jobs:
   terraform:
