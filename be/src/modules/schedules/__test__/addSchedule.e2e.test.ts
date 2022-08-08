@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { GroupsErrorMessage } from '@modules/groups/constants/errorMessages';
+import { SchedulesErrorMessage } from '@modules/schedules/constants/errorMessages';
 import { INestApplication } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import { createAuthOwner } from '@utils/test/createAuthOwner';
@@ -7,36 +7,36 @@ import { createTestApp } from '@utils/test/createTestApp';
 import { defineCall } from '@utils/test/defineCall';
 import { resErrMsg } from '@utils/test/resErrMsg';
 
-describe('POST groups', () => {
+describe('POST /schedules', () => {
   const prisma = new PrismaClient();
 
-  const callAddGroup = defineCall('post', '/groups');
+  const callAddSchedule = defineCall('post', '/schedules');
 
   let app: INestApplication;
   let token: string;
 
   beforeAll(async () => {
     app = await createTestApp();
-    token = await createAuthOwner(app);
-
-    callAddGroup.setApp(app);
-    callAddGroup.setDefaultToken(token);
+    const owner = await createAuthOwner(app);
+    token = owner.token;
+    callAddSchedule.setApp(app);
+    callAddSchedule.setDefaultToken(token);
   });
 
   afterAll(async () => {
     await app.close();
   });
 
-  it('should create group', async () => {
+  it('should create schedule', async () => {
     const name = faker.random.word();
-    const { body } = await callAddGroup().send({ name }).expect(201);
+    const { body } = await callAddSchedule().send({ name }).expect(201);
     expect(body).toEqual({ id: expect.any(Number) });
 
-    const createdGroup = await prisma.group.findFirst({
+    const createdSchedule = await prisma.schedule.findFirst({
       where: { id: body.id },
     });
 
-    expect(createdGroup).toEqual({
+    expect(createdSchedule).toEqual({
       id: expect.any(Number),
       organizationId: expect.any(Number),
       name,
@@ -45,13 +45,13 @@ describe('POST groups', () => {
 
   it('should throw error when name is not unique', async () => {
     const name = faker.random.word();
-    await callAddGroup().send({ name }).expect(201);
-    await callAddGroup()
+    await callAddSchedule().send({ name }).expect(201);
+    await callAddSchedule()
       .send({ name })
-      .expect(...resErrMsg(409, GroupsErrorMessage.NOT_UNIQUE_NAME));
+      .expect(...resErrMsg(409, SchedulesErrorMessage.NOT_UNIQUE_NAME));
   });
 
   it('should throw error when body is empty', async () => {
-    await callAddGroup().expect(...resErrMsg(400, ['name must be a string']));
+    await callAddSchedule().expect(...resErrMsg(400, ['name must be a string']));
   });
 });

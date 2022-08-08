@@ -37,14 +37,31 @@ model Organization {
   name String
 
   users UserRoleInOrganization[]
-  groups Group[]
+  groups Schedule[]
 }
 
-model Group {
+model Schedule {
   id Int @default(autoincrement()) @id
   name String
   organizationId Int
   organization Organization @relation(fields: [organizationId], references: [id])
 
+  scheduleDays ScheduleDay[]
+
   @@unique([name, organizationId])
 }
+
+model ScheduleDay {
+  id Int @default(autoincrement()) @id
+  date DateTime
+  startTime Int
+  startToTime Int?
+  workTime Int
+
+  scheduleId Int
+  schedule Schedule @relation(fields: [scheduleId], references: [id])
+
+  @@unique([date, scheduleId])
+}
+
+

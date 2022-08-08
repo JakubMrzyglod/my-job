@@ -1,12 +1,6 @@
 import { ConfigurationValidationSchema } from '@config/validation/schema';
 
 export default (): ConfigurationValidationSchema => {
-  console.log({
-    auth: {
-      passwordSalt: process.env.PASSWORD_SALT,
-      jwtSecret: process.env.JWT_SECRET_KEY,
-    },
-  });
   return {
     database: {
       port: +process.env.DB_PORT,
