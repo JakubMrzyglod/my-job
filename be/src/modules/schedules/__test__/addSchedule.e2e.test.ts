@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { SchedulesErrorMessage } from '@modules/schedules/constants/errorMessages';
-import { INestApplication } from '@nestjs/common';
+import { HttpStatus, INestApplication } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import { createAuthOwner } from '@utils/test/createAuthOwner';
 import { createTestApp } from '@utils/test/createTestApp';
@@ -29,8 +29,9 @@ describe('POST /schedules', () => {
 
   it('should create schedule', async () => {
     const name = faker.random.word();
-    const { body } = await callAddSchedule().send({ name }).expect(201);
-    expect(body).toEqual({ id: expect.any(Number) });
+    const { body } = await callAddSchedule()
+      .send({ name })
+      .expect(HttpStatus.CREATED, { id: expect.any(Number) });
 
     const createdSchedule = await prisma.schedule.findFirst({
       where: { id: body.id },
@@ -45,15 +46,20 @@ describe('POST /schedules', () => {
 
   it('should throw error when name is not unique', async () => {
     const name = faker.random.word();
-    await callAddSchedule().send({ name }).expect(201);
+    await callAddSchedule().send({ name }).expect(HttpStatus.CREATED);
     await callAddSchedule()
       .send({ name })
-      .expect(...resErrMsg(409, SchedulesErrorMessage.NOT_UNIQUE_NAME));
+      .expect(
+        ...resErrMsg(
+          HttpStatus.CONFLICT,
+          SchedulesErrorMessage.NOT_UNIQUE_NAME,
+        ),
+      );
   });
 
   it('should throw error when body is empty', async () => {
     await callAddSchedule().expect(
-      ...resErrMsg(400, ['name must be a string']),
+      ...resErrMsg(HttpStatus.BAD_REQUEST, ['name must be a string']),
     );
   });
 });

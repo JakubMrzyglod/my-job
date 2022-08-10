@@ -6,13 +6,14 @@ import { Auth } from '@common/decorators/auth.decorator';
 import { GetOrgId } from '@common/decorators/getOrgId.decorator';
 import { AddScheduleDaysCommand } from '@modules/schedules/commands/impl/addSchedules.command';
 import { AddScheduleDaysDto } from '@modules/schedules/dto/addScheduleDays.dto';
+import { Role } from '@prisma/client';
 
 @Controller('schedules')
 export class SchedulesController {
   constructor(private readonly commandBus: CommandBus) {}
 
   @Post()
-  @Auth()
+  @Auth(Role.OWNER)
   create(@Body() { name }: AddScheduleDto, @GetOrgId() organizationId: number) {
     return this.commandBus.execute(
       new AddSchedulesCommand(name, organizationId),
@@ -20,6 +21,7 @@ export class SchedulesController {
   }
 
   @Post('/:scheduleId/days')
+  @Auth(Role.OWNER)
   add(
     @Body() { days }: AddScheduleDaysDto,
     @Param('scheduleId', ParseIntPipe) scheduleId: number,

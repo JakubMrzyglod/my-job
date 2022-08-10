@@ -34,13 +34,13 @@ export const createOwner = async (
     data: {
       hashedPassword,
       email,
-      organizations: {
+      organizationUserRoles: {
         create: {
           role: Role.OWNER,
           organization: { create: { name: faker.company.companyName() } },
         },
       },
     },
-    include: { organizations: true },
+    include: { organizationUserRoles: true },
   });
 };

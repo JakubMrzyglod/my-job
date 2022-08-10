@@ -63,6 +63,7 @@ describe('PATCH auth/login', () => {
       id: expect.any(Number),
       hashedPassword: expect.any(String),
       email,
+      scheduleId: null,
       organizations: [
         {
           role: Role.OWNER,

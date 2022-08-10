@@ -1,4 +1,4 @@
-import { INestApplication } from '@nestjs/common';
+import { HttpStatus, INestApplication } from '@nestjs/common';
 import { PrismaClient, Schedule } from '@prisma/client';
 import { AuthOwner, createAuthOwner } from '@utils/test/createAuthOwner';
 import { createSchedule } from '@utils/test/schedule';
@@ -38,7 +38,7 @@ describe('POST groups', () => {
   it('should add days to schedule', async () => {
     const SCHEDULE_DAY_COUNT = 5;
     const days = getScheduleDayData(schedule.id, SCHEDULE_DAY_COUNT);
-    await callAddSchedules().send({ days }).expect(201, {});
+    await callAddSchedules().send({ days }).expect(HttpStatus.CREATED, {});
   });
 
   it('should add days to schedule', async () => {
@@ -48,7 +48,7 @@ describe('POST groups', () => {
     await callAddSchedules().send({ days });
     await callAddSchedules()
       .send({ days: days.map((day) => ({ ...day, workTime: NEW_WORK_TIME })) })
-      .expect(201, {});
+      .expect(HttpStatus.CREATED, {});
     const updatedScheduleDays = await prisma.scheduleDay.findMany({
       where: { scheduleId: schedule.id },
     });

@@ -9,18 +9,22 @@ datasource db {
 
 model User {
   id Int  @default(autoincrement()) @id
-  email String
-  hashedPassword String
+  email String @unique
+  hashedPassword String?
 
-  organizations UserRoleInOrganization[]
+  organizationUserRoles OrganizationUserRole[]
 }
 
-model UserRoleInOrganization {
+model OrganizationUserRole {
   userId Int
   user User @relation(fields: [userId], references: [id])
 
   organizationId Int
   organization Organization @relation(fields: [organizationId], references: [id])
+
+  
+  scheduleId Int?
+  schedule Schedule? @relation(fields: [scheduleId], references: [id])
 
   role Role @default(WORKER)
 
@@ -36,8 +40,8 @@ model Organization {
   id Int @default(autoincrement()) @id
   name String
 
-  users UserRoleInOrganization[]
-  groups Schedule[]
+  organizationUserRoles OrganizationUserRole[]
+  schedules Schedule[]
 }
 
 model Schedule {
@@ -47,8 +51,10 @@ model Schedule {
   organization Organization @relation(fields: [organizationId], references: [id])
 
   scheduleDays ScheduleDay[]
+  organizationUserRoles OrganizationUserRole[]
 
   @@unique([name, organizationId])
+  @@unique([id, organizationId])
 }
 
 model ScheduleDay {
