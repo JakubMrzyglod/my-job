@@ -1,4 +1,4 @@
-export class AddGroupCommand {
+export class AddSchedulesCommand {
   constructor(
     public readonly name: string,
     public readonly organizationId: number,

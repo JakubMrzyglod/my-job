@@ -56,18 +56,19 @@ describe('PATCH auth/login', () => {
 
     const createdUser = await prisma.user.findFirst({
       where: { email },
-      include: { organizations: { include: { organization: true } } },
+      include: { organizationUserRoles: { include: { organization: true } } },
     });
 
     expect(createdUser).toEqual({
       id: expect.any(Number),
       hashedPassword: expect.any(String),
       email,
-      organizations: [
+      organizationUserRoles: [
         {
           role: Role.OWNER,
           organizationId: expect.any(Number),
           userId: expect.any(Number),
+          scheduleId: null,
           organization: {
             id: expect.any(Number),
             name: expect.any(String),

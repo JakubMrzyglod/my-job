@@ -8,6 +8,7 @@ import * as crypto from 'crypto';
 type UserDetails = {
   email?: string;
   password?: string;
+  orgId?: number;
 };
 export const createUser = async (
   app: INestApplication,
@@ -27,6 +28,17 @@ export const createUser = async (
     .createHmac('sha256', passwordSalt)
     .update(password)
     .digest('hex');
-
-  return prisma.user.create({ data: { hashedPassword, email } });
+  const userData = { hashedPassword, email };
+  const orgId = userDetails?.orgId;
+  if (orgId) {
+    const { user } = await prisma.organizationUserRole.create({
+      data: {
+        user: { create: userData },
+        organization: { connect: { id: orgId } },
+      },
+      select: { user: true },
+    });
+    return user;
+  }
+  return prisma.user.create({ data: userData });
 };

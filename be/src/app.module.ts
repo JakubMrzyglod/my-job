@@ -4,7 +4,7 @@ import configuration from '@config/configuration';
 import { validate } from '@config/validation';
 import { UserModule } from '@modules/users/users.module';
 import { AuthModule } from '@modules/auth/auth.module';
-import { GroupsModule } from './modules/groups/groups.module';
+import { SchedulesModule } from './modules/schedules/schedules.module';
 import { AccessTokenModule } from './modules/access-token/access-token.module';
 
 @Module({
@@ -17,7 +17,7 @@ import { AccessTokenModule } from './modules/access-token/access-token.module';
     }),
     UserModule,
     AuthModule,
-    GroupsModule,
+    SchedulesModule,
     AccessTokenModule,
   ],
 })

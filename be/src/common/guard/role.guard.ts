@@ -21,6 +21,7 @@ export class RoleGuard implements CanActivate {
     if (!user) {
       throw new UnauthorizedException();
     }
-    return roles.includes(user.role);
+    const organization = user.orgs.find(({ role }) => roles.includes(role));
+    return !!organization;
   }
 }

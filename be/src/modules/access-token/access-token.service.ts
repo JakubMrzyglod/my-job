@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { User, UserRoleInOrganization } from '@prisma/client';
+import { User, OrganizationUserRole } from '@prisma/client';
 
 @Injectable()
 export class AccessTokenService {
@@ -8,9 +8,9 @@ export class AccessTokenService {
 
   createAccessToken({
     id: sub,
-    organizations,
-  }: User & { organizations: UserRoleInOrganization[] }) {
-    const organizationIdAndRoleList = organizations.map(
+    organizationUserRoles,
+  }: User & { organizationUserRoles: OrganizationUserRole[] }) {
+    const organizationIdAndRoleList = organizationUserRoles.map(
       ({ organizationId: id, role }) => ({ id, role }),
     );
     const payload = { sub, orgs: organizationIdAndRoleList };

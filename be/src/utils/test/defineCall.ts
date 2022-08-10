@@ -10,7 +10,7 @@ type CallFn<T extends PathFn> = {
   setDefaultToken(token: string): void;
 };
 type ReqMethod = 'get' | 'post' | 'delete' | 'put' | 'patch';
-type PathFn = (...args: string[]) => string;
+type PathFn = (...args: (string | number)[]) => string;
 
 // export const testEndpointAuthentication = (fn: Call) => {
 //   it('Should throw 401  when no valid auth token provided', async () => {
