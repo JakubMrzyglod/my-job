@@ -22,6 +22,8 @@ export class UserController {
     @Body() newWorkerDetails: AddWorkerDto,
     @GetOrgId() organizationId: number,
   ) {
-    return this.commandBus.execute(new AddWorkerCommand(newWorkerDetails, organizationId));
+    return this.commandBus.execute(
+      new AddWorkerCommand(newWorkerDetails, organizationId),
+    );
   }
 }
