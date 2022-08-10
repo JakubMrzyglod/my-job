@@ -31,7 +31,9 @@ describe('POST /schedules', () => {
     const name = faker.random.word();
     const { body } = await callAddSchedule()
       .send({ name })
-      .expect(HttpStatus.CREATED, { id: expect.any(Number) });
+      .expect(HttpStatus.CREATED);
+
+    expect(body).toEqual({ id: expect.any(Number) });
 
     const createdSchedule = await prisma.schedule.findFirst({
       where: { id: body.id },
